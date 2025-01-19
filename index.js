@@ -70,29 +70,65 @@ else
         }            
     } 
 
-    // console.log(objCSV);
-
     //TODO - Part 3
     //Remove the last element from the sorted array.
     let SortRemovedArray = [];
     SortRemovedArray = objCSV.toSorted().slice(0,objCSV.length-1);    
     console.log(SortRemovedArray);
-    //console.log(objCSV);
-
+    
     //TODO - Insert the following object at index 1:
     let insertObject = {id: "48", name: "Barry", occupation: "Runner", age: "25" };
     let insertArray = [];
     insertArray = SortRemovedArray.toSpliced(1,0,insertObject);     
     
-    console.log(insertArray);
-
     // //ToDo - Add the following object to the end of the array:
     //{ id: "7", name: "Bilbo", occupation: "None", age: "111" }
     let insertObjectEnd = {id: "7", name: "Bilbo", occupation: "None", age: "111" }; 
     
     insertArray.push(insertObjectEnd);
     
-    console.log(insertArray.join(","));
+    console.log(insertArray);
+
+    //TODO - Transforming to CSV
+    //Transform the final set of data back into CSV format
+
+    const finalCSV = [];
+    let rowValue = 0;
+    let colValue = 0;
+    finalCSV[0] = [];
+
+    //To get heading as first row
+    //fetch keys from the first row of insertarray and store it as first row in finalCSV
+
+    for(const key in insertArray[0])
+    {
+        finalCSV[0][colValue] = key.toUpperCase();               
+        colValue ++;
+    }
+    finalCSV[0][colValue] = "\n"; 
+
+    //fetch values from insertarray and store it in finalCSV
+    for(let k=0; k < insertArray.length; k++)
+    {
+        finalCSV[k+1] =[];
+        colValue = 0;
+        for(const key in insertArray[k])
+        {
+            finalCSV[k+1][colValue] = insertArray[k][key]; 
+            colValue ++;
+        }
+        finalCSV[k+1][colValue] = "\n";
+    }
+
+    //to convert into CSV, flaten the array
+    //while flaten, \n will be replaced by ,\n, so it is replaced with \n
+    console.log(finalCSV.flat());
+    
+    console.log(finalCSV.flat().toString().replaceAll(",\n,","\\n"));
+
+
+
+
 
 
     
