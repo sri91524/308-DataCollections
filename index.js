@@ -7,6 +7,8 @@ let textToBeFormatted = "ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry 
 
 // let textToBeFormatted ="Index,Mass (kg),Spring 1 (m),Spring 2 (m)\n1,0.00,0.050,0.050\n2,0.49,0.066,0.066\n3,0.98,0.087,0.080\n4,1.47,0.116,0.108\n5,1.96,0.142,0.138\n6,2.45,0.166,0.158\n7,2.94,0.193,0.174\n8,3.43,0.204,0.192\n9,3.92,0.226,0.205\n10,4.41,0.238,0.232";
 
+console.log("==============Original CSV==============");
+console.log(textToBeFormatted);
 
 let rowValues = textToBeFormatted.split("\n");
 let numberOfColumns = rowValues[0].split(",").length;
@@ -69,23 +71,32 @@ else
         }            
     } 
 
+    console.log("=================Array of object==============");
+    console.log(objCSV);
+
     //TODO - Part 3
     //Remove the last element from the sorted array.
     let SortRemovedArray = [];
-    SortRemovedArray = objCSV.toSorted().slice(0,objCSV.length-1);    
+    SortRemovedArray = objCSV.toSorted().slice(0,objCSV.length-1); 
+   
+    console.log("==================Removed last element of the sorted array==========================");
     console.log(SortRemovedArray);
-    
+
     //TODO - Part 4 - Insert the following object at index 1:
     let insertObject = {id: "48", name: "Barry", occupation: "Runner", age: "25" };
     let insertArray = [];
-    insertArray = SortRemovedArray.toSpliced(1,0,insertObject);     
+    insertArray = SortRemovedArray.toSpliced(1,0,insertObject);  
+    
+    console.log("==================Inserted the object===============================================");
+    console.log(insertArray);
     
     // //ToDo - Part 4- Add the following object to the end of the array:
     //{ id: "7", name: "Bilbo", occupation: "None", age: "111" }
     let insertObjectEnd = {id: "7", name: "Bilbo", occupation: "None", age: "111" }; 
     
     insertArray.push(insertObjectEnd);
-    
+
+    console.log("===================Inserted object to the end of the array==========================");  
     console.log(insertArray);
 
     //TODO - Part 5 - Transforming to CSV
@@ -113,7 +124,9 @@ else
     }
 
     //,\n is replaced with \n and \n at the end will be removed
-    finalCSV = finalCSV.replaceAll(",\\n","\\n")
+    finalCSV = finalCSV.replaceAll(",\\n","\\n");
+
+    console.log("=========================Transformed to CSV============================");
     console.log(finalCSV.slice(0, finalCSV.length-2));
 
 
