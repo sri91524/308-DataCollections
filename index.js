@@ -3,9 +3,10 @@
 // ToDo - Part 2- Declare a variable that stores the number of columns in each row of data within the CSV.
 // ToDo - Instead of hard-coding four columns per row, expand your code to accept any number of columns. This should be calculated dynamically based on the first row of data.
 
-let textToBeFormatted = "ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry Cook,19\n63,Blaine,Quiz Master,58\n98,Bill,Doctor’s Assistant,26";
+let textToBeFormatted = "";
+textToBeFormatted = "ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry Cook,19\n63,Blaine,Quiz Master,58\n98,Bill,Doctor’s Assistant,26";
 
-// let textToBeFormatted ="Index,Mass (kg),Spring 1 (m),Spring 2 (m)\n1,0.00,0.050,0.050\n2,0.49,0.066,0.066\n3,0.98,0.087,0.080\n4,1.47,0.116,0.108\n5,1.96,0.142,0.138\n6,2.45,0.166,0.158\n7,2.94,0.193,0.174\n8,3.43,0.204,0.192\n9,3.92,0.226,0.205\n10,4.41,0.238,0.232";
+//textToBeFormatted ="Index,Mass (kg),Spring 1 (m),Spring 2 (m)\n1,0.00,0.050,0.050\n2,0.49,0.066,0.066\n3,0.98,0.087,0.080\n4,1.47,0.116,0.108\n5,1.96,0.142,0.138\n6,2.45,0.166,0.158\n7,2.94,0.193,0.174\n8,3.43,0.204,0.192\n9,3.92,0.226,0.205\n10,4.41,0.238,0.232";
 
 console.log("==============Original CSV==============");
 console.log(textToBeFormatted);
@@ -21,7 +22,7 @@ const CSVOutput = [];
 // if there is no escape sequence \n
 if(rowValues.length <= 1)
 {
-    alert("Please enter escape sequence \n for new rows");
+    alert("Please enter escape sequence \\n for new rows");    
 }
 else
 {        
@@ -75,23 +76,28 @@ else
     console.log(objCSV);
 
     //TODO - Part 3
-    //Remove the last element from the sorted array.
-    let SortRemovedArray = [];
-    SortRemovedArray = objCSV.toSorted().slice(0,objCSV.length-1); 
+    //Remove the last element from the sorted array. Slice method used instead of pop
+    //Push and pop affect the source value so creating copy [...objCSV]
+    // let SortRemovedArray = [];
+    // SortRemovedArray = objCSV.toSorted().slice(0,objCSV.length-1);
+    
+    const SortRemovedArray = [...objCSV];
+    SortRemovedArray.pop();
    
     console.log("==================Removed last element of the sorted array==========================");
     console.log(SortRemovedArray);
 
     //TODO - Part 4 - Insert the following object at index 1:
     let insertObject = {id: "48", name: "Barry", occupation: "Runner", age: "25" };
-    let insertArray = [];
-    insertArray = SortRemovedArray.toSpliced(1,0,insertObject);  
+    let insertArrayIndex1 = [];
+    insertArrayIndex1 = SortRemovedArray.toSpliced(1,0,insertObject);  
     
-    console.log("==================Inserted the object===============================================");
-    console.log(insertArray);
+    console.log("==================Inserted the object at Index 1===============================================");
+    console.log(insertArrayIndex1);
     
     // //ToDo - Part 4- Add the following object to the end of the array:
     //{ id: "7", name: "Bilbo", occupation: "None", age: "111" }
+    let insertArray = [...insertArrayIndex1]
     let insertObjectEnd = {id: "7", name: "Bilbo", occupation: "None", age: "111" }; 
     
     insertArray.push(insertObjectEnd);
@@ -99,44 +105,69 @@ else
     console.log("===================Inserted object to the end of the array==========================");  
     console.log(insertArray);
 
+    // Finally, use the values of each object within the array and the array’s length property to calculate the average age of the group. This calculation should be accomplished using a loop
+
+    let sumOfAge = 0;
+    let averageAge
+
+    for(let i = 0; i < insertArray.length; i++)
+    {
+        sumOfAge += parseInt(insertArray[i].age);
+    }
+    averageAge = parseInt(sumOfAge / insertArray.length);
+    console.log(`Average age span: ${averageAge} years`);
+
     //TODO - Part 5 - Transforming to CSV
     //Transform the final set of data back into CSV format
 
-    let finalCSV = "";
+    //===========================optimised code with use of Object.keys & join and Object.values & join
+
+    let finalCSV = [];
     
     //To get heading as first row
-    //fetch keys from the first row of insertarray and store it as first row in finalCSV
+    //fetch keys from the first row of insertarray and store it as first row in finalCSV seperated by comma
+     
+    let header = Object.keys(insertArray[0]).join(",");
+    finalCSV.push(header);
+    //fetch values from insertarray and store it in finalCSV seperated by comma
 
-    for(const key in insertArray[0])
-    {
-        finalCSV += key.toUpperCase() + ",";             
-    }
-    finalCSV += "\\n"; 
-
-    //fetch values from insertarray and store it in finalCSV
     for(let k=0; k < insertArray.length; k++)
-    {
-        for(const key in insertArray[k])
         {
-            finalCSV += insertArray[k][key] + ",";             
+            let row = Object.values(insertArray[k]).join(",");
+            finalCSV.push(row);
         }
-        finalCSV += "\\n";
-    }
+    
+    //convert finalCSV array to string seperated by newline character before each row
 
-    //,\n is replaced with \n and \n at the end will be removed
-    finalCSV = finalCSV.replaceAll(",\\n","\\n");
+    console.log("=========================Transformed back to CSV============================");
+    console.log(finalCSV.join("\\n"));
 
-    console.log("=========================Transformed to CSV============================");
-    console.log(finalCSV.slice(0, finalCSV.length-2));
+//==================== second approach to iterate keys and values and storing it in string===============
+
+    // for(const key in insertArray[0])
+    // {
+    //     finalCSV += key.toUpperCase() + ",";             
+    // }
+    // finalCSV += "\\n"; 
+
+    // //fetch values from insertarray and store it in finalCSV
+    // for(let k=0; k < insertArray.length; k++)
+    // {
+    //     for(const key in insertArray[k])
+    //     {
+    //         finalCSV += insertArray[k][key] + ",";             
+    //     }
+    //     finalCSV += "\\n";
+    // }
+
+    // //,\n is replaced with \n and \n at the end will be removed
+    // finalCSV = finalCSV.replaceAll(",\\n","\\n");
+
+    // console.log("=========================Transformed to CSV============================");
+    // console.log(finalCSV.slice(0, finalCSV.length-2));
 
 
-
-
-
-
-
-
-    //=================== second approach with use of array & flat ===================================================
+    //=================== third approach with use of array & flat ===================================================
      // const finalCSV = [];
     // let rowValue = 0;
     // let colValue = 0;
